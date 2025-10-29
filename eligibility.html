@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Apply for a loan with Swift Loan Limited - Check your eligibility">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="favicon.png">
     <title>Loan Application - Swift Loan Limited</title>
+    
     <style>
         * {
             margin: 0;
@@ -11,28 +15,35 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-orange: #FF6B00;
+            --primary-blue: #001F5C;
+            --light-gray: #F5F5F5;
+            --text-dark: #333;
+            --white: #FFFFFF;
+            --success-green: #28a745;
+            --error-red: #dc3545;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #001f5c 0%, #003d8f 100%);
+            background: linear-gradient(135deg, var(--light-gray) 0%, #e0e0e0 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            padding: 2rem 5%;
         }
 
         .container {
-            background: #fff;
-            max-width: 600px;
-            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             overflow: hidden;
         }
 
         .header {
-            background: #001f5c;
-            color: #fff;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #003580 100%);
+            color: var(--white);
             padding: 2rem;
             text-align: center;
         }
@@ -40,55 +51,113 @@
         .logo-text {
             font-size: 2rem;
             font-weight: bold;
-            font-style: italic;
+            margin-bottom: 0.5rem;
         }
 
         .logo-text span {
-            color: #ff6b35;
+            color: var(--primary-orange);
         }
 
-        .header p {
-            margin-top: 0.5rem;
+        .header-subtitle {
             opacity: 0.9;
+            font-size: 0.9rem;
         }
 
-        .content {
-            padding: 2.5rem;
-        }
-
-        .step-indicator {
+        .progress-bar {
             display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            justify-content: space-between;
+            padding: 2rem;
+            background: var(--white);
+            border-bottom: 2px solid var(--light-gray);
         }
 
-        .step {
-            width: 40px;
-            height: 40px;
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 3px;
+            background: var(--light-gray);
+            z-index: 0;
+        }
+
+        .progress-step:first-child::before {
+            left: 50%;
+            width: 50%;
+        }
+
+        .progress-step:last-child::before {
+            width: 50%;
+        }
+
+        .progress-circle {
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            background: #e0e0e0;
-            display: flex;
+            background: var(--light-gray);
+            color: #999;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            position: relative;
+            z-index: 1;
+            transition: 0.3s;
+        }
+
+        .progress-step.active .progress-circle {
+            background: var(--primary-orange);
+            color: var(--white);
+            transform: scale(1.2);
+        }
+
+        .progress-step.completed .progress-circle {
+            background: var(--success-green);
+            color: var(--white);
+        }
+
+        .progress-label {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
             color: #666;
         }
 
-        .step.active {
-            background: #ff6b35;
-            color: #fff;
+        .progress-step.active .progress-label {
+            color: var(--primary-orange);
+            font-weight: bold;
         }
 
-        .step.completed {
-            background: #4caf50;
-            color: #fff;
+        .form-content {
+            padding: 2rem;
         }
 
-        h2 {
-            color: #001f5c;
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
             margin-bottom: 1.5rem;
-            text-align: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-orange);
         }
 
         .form-group {
@@ -98,45 +167,125 @@
         label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 500;
+            color: var(--text-dark);
+            font-weight: 600;
         }
 
-        label span {
-            color: #ff6b35;
+        label .required {
+            color: var(--error-red);
         }
 
-        input, select {
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select {
             width: 100%;
             padding: 0.8rem;
             border: 2px solid #ddd;
-            border-radius: 8px;
+            border-radius: 5px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: 0.3s;
         }
 
-        input:focus, select:focus {
+        input:focus,
+        select:focus {
             outline: none;
-            border-color: #ff6b35;
+            border-color: var(--primary-orange);
+        }
+
+        input.error,
+        select.error {
+            border-color: var(--error-red);
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .consent-box {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .consent-box h4 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .consent-box ul {
+            margin-left: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .consent-box ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-top: 2rem;
         }
 
         .btn {
-            width: 100%;
-            padding: 1rem;
-            background: #ff6b35;
-            color: #fff;
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            border-radius: 5px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: 0.3s;
         }
 
-        .btn:hover {
-            background: #e55a2b;
+        .btn-primary {
+            background: var(--primary-orange);
+            color: var(--white);
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: #ff8534;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
         }
 
         .btn:disabled {
@@ -145,33 +294,8 @@
             transform: none;
         }
 
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 1rem;
-            color: #001f5c;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            color: #ff6b35;
-        }
-
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        /* Loading Spinner */
-        .loading-overlay {
+        /* Modal */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -179,21 +303,155 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.8);
-            z-index: 9999;
-            align-items: center;
+            z-index: 2000;
             justify-content: center;
-            flex-direction: column;
+            align-items: center;
         }
 
-        .loading-overlay.show {
+        .modal.active {
             display: flex;
         }
 
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .modal-icon.error {
+            background: #ffe0e0;
+            color: var(--error-red);
+        }
+
+        .modal-icon.success {
+            background: #d4edda;
+            color: var(--success-green);
+        }
+
+        .modal-title {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-text {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close {
+            background: var(--primary-orange);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #ff8534;
+        }
+
+        /* Processing Modal */
+        .processing-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .processing-modal.active {
+            display: flex;
+        }
+
+        .processing-content {
+            background: rgba(255,255,255,0.95);
+            padding: 3rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .processing-steps {
+            margin: 2rem 0;
+        }
+
+        .processing-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--light-gray);
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .processing-step.active {
+            background: #fff3e0;
+        }
+
+        .processing-step.completed {
+            background: #d4edda;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ddd;
+            color: #666;
+        }
+
+        .processing-step.active .step-icon {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
+
+        .processing-step.completed .step-icon {
+            background: var(--success-green);
+            color: var(--white);
+        }
+
+        .step-text {
+            flex: 1;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #ff6b35;
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--light-gray);
+            border-top: 3px solid var(--primary-orange);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -203,235 +461,561 @@
             100% { transform: rotate(360deg); }
         }
 
-        .loading-text {
-            color: #fff;
-            margin-top: 1.5rem;
-            font-size: 1.2rem;
-            text-align: center;
+        .checkmark {
+            display: none;
         }
 
-        .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-radius: 5px;
+        .processing-step.completed .checkmark {
+            display: block;
         }
 
-        .info-box p {
-            color: #1565c0;
-            margin: 0;
-            font-size: 0.95rem;
+        .processing-step.completed .spinner {
+            display: none;
         }
 
-        @media (max-width: 480px) {
-            .content {
-                padding: 1.5rem;
+        .processing-time {
+            margin-top: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 3%;
             }
 
             .header {
-                padding: 1.5rem;
+                padding: 1.5rem 1rem;
             }
 
             .logo-text {
                 font-size: 1.5rem;
             }
+
+            .form-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn-secondary {
+                order: 2;
+            }
+
+            .progress-label {
+                font-size: 0.65rem;
+            }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--white);
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo-text">Swift<span>Loan</span></div>
-            <p>Loan Application Form</p>
+            <div class="logo-text"><span>Swift</span> Loan</div>
+            <div class="header-subtitle" data-en="Complete your application in 3 easy steps" data-sw="Kamilisha maombi yako katika hatua 3 rahisi">Complete your application in 3 easy steps</div>
         </div>
 
-        <div class="content">
-            <div class="step-indicator">
-                <div class="step active">1</div>
-                <div class="step">2</div>
-                <div class="step">3</div>
+        <div class="progress-bar">
+            <div class="progress-step active" data-step="1">
+                <div class="progress-circle">1</div>
+                <div class="progress-label" data-en="Personal Info" data-sw="Maelezo Binafsi">Personal Info</div>
             </div>
-
-            <h2>Check Your Eligibility</h2>
-
-            <div class="info-box">
-                <p>
-                    <svg width="16" height="16" fill="#2196f3" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 5px;">
-                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                    </svg>
-                    Please provide accurate information to help us process your loan application quickly.
-                </p>
+            <div class="progress-step" data-step="2">
+                <div class="progress-circle">2</div>
+                <div class="progress-label" data-en="Other Details" data-sw="Maelezo Mengine">Other Details</div>
             </div>
+            <div class="progress-step" data-step="3">
+                <div class="progress-circle">3</div>
+                <div class="progress-label" data-en="Consent" data-sw="Idhini">Consent</div>
+            </div>
+        </div>
 
-            <div class="error-message" id="errorMessage"></div>
+        <div class="form-content">
+            <form id="loanForm">
+                <!-- Section 1: Personal Information -->
+                <div class="form-section active" data-section="1">
+                    <h2 class="section-title" data-en="Personal Information" data-sw="Taarifa za Kibinafsi">Personal Information</h2>
+                    
+                    <div class="form-group">
+                        <label data-en="Full Name" data-sw="Jina Kamili">Full Name <span class="required">*</span></label>
+                        <input type="text" id="fullName" required>
+                        <span class="error-message" id="fullNameError"></span>
+                    </div>
 
-            <form id="eligibilityForm">
-                <div class="form-group">
-                    <label>Full Name <span>*</span></label>
-                    <input type="text" id="fullName" required placeholder="Enter your full name">
+                    <div class="form-group">
+                        <label data-en="National ID Number" data-sw="Nambari ya Kitambulisho">National ID Number <span class="required">*</span></label>
+                        <input type="text" id="idNumber" required>
+                        <span class="error-message" id="idNumberError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Date of Birth" data-sw="Tarehe ya Kuzaliwa">Date of Birth <span class="required">*</span></label>
+                        <input type="date" id="dob" required>
+                        <span class="error-message" id="dobError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Phone Number" data-sw="Nambari ya Simu">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phone" placeholder="0712345678" required>
+                        <span class="error-message" id="phoneError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Email Address" data-sw="Barua Pepe">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" required>
+                        <span class="error-message" id="emailError"></span>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'" data-en="Cancel" data-sw="Ghairi">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="nextSection()" data-en="Next" data-sw="Endelea">Next</button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Phone Number <span>*</span></label>
-                    <input type="tel" id="phoneNumber" required placeholder="e.g., 0712345678" pattern="[0-9]{10}">
+                <!-- Section 2: Other Details -->
+                <div class="form-section" data-section="2">
+                    <h2 class="section-title" data-en="Financial & Employment Details" data-sw="Maelezo ya Fedha na Ajira">Financial & Employment Details</h2>
+                    
+                    <div class="form-group">
+                        <label data-en="Employment Status" data-sw="Hali ya Ajira">Employment Status <span class="required">*</span></label>
+                        <select id="employment" required>
+                            <option value="">Select...</option>
+                            <option value="employed">Employed</option>
+                            <option value="self-employed">Self-Employed</option>
+                            <option value="business-owner">Business Owner</option>
+                            <option value="unemployed">Unemployed</option>
+                        </select>
+                        <span class="error-message" id="employmentError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Monthly Income (KSh)" data-sw="Mapato ya Kila Mwezi (KSh)">Monthly Income (KSh) <span class="required">*</span></label>
+                        <input type="number" id="income" min="0" required>
+                        <span class="error-message" id="incomeError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Loan Amount Requested (KSh)" data-sw="Kiasi cha Mkopo Unaohitaji (KSh)">Loan Amount Requested (KSh) <span class="required">*</span></label>
+                        <input type="number" id="loanAmount" min="1000" max="5000000" required>
+                        <span class="error-message" id="loanAmountError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Loan Purpose" data-sw="Madhumuni ya Mkopo">Loan Purpose <span class="required">*</span></label>
+                        <select id="loanPurpose" required>
+                            <option value="">Select...</option>
+                            <option value="business">Business Expansion</option>
+                            <option value="education">Education</option>
+                            <option value="medical">Medical Emergency</option>
+                            <option value="personal">Personal Use</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <span class="error-message" id="loanPurposeError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="County of Residence" data-sw="Kaunti Unakoishi">County of Residence <span class="required">*</span></label>
+                        <input type="text" id="county" required>
+                        <span class="error-message" id="countyError"></span>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="prevSection()" data-en="Back" data-sw="Rudi">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="nextSection()" data-en="Next" data-sw="Endelea">Next</button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>ID Number <span>*</span></label>
-                    <input type="text" id="idNumber" required placeholder="Enter your National ID number">
-                </div>
+                <!-- Section 3: Consent -->
+                <div class="form-section" data-section="3">
+                    <h2 class="section-title" data-en="Terms & Consent" data-sw="Masharti na Idhini">Terms & Consent</h2>
+                    
+                    <div class="consent-box">
+                        <h4 data-en="Important Notes:" data-sw="Maelezo Muhimu:">Important Notes:</h4>
+                        <ul>
+                            <li data-en="Your information will be used solely for loan processing and credit assessment." data-sw="Taarifa yako itatumika tu kwa uchakataji wa mkopo na tathmini ya mkopo.">Your information will be used solely for loan processing and credit assessment.</li>
+                            <li data-en="Interest rate is 7% per annum on all approved loans." data-sw="Kiwango cha riba ni 7% kwa mwaka kwa mikopo yote iliyoidhinishwa.">Interest rate is 7% per annum on all approved loans.</li>
+                            <li data-en="A processing fee will apply based on your loan amount." data-sw="Ada ya uchakataji itatumika kulingana na kiasi cha mkopo wako.">A processing fee will apply based on your loan amount.</li>
+                            <li data-en="Loan approval is subject to credit verification." data-sw="Idhini ya mkopo inategemea uthibitishaji wa mkopo.">Loan approval is subject to credit verification.</li>
+                            <li data-en="You must repay the loan according to the agreed schedule." data-sw="Lazima ulipe mkopo kulingana na ratiba iliyokubaliwa.">You must repay the loan according to the agreed schedule.</li>
+                            <li data-en="We reserve the right to reject any application." data-sw="Tunahifadhi haki ya kukataa ombi lolote.">We reserve the right to reject any application.</li>
+                        </ul>
+                    </div>
 
-                <div class="form-group">
-                    <label>Email Address <span>*</span></label>
-                    <input type="email" id="email" required placeholder="your.email@example.com">
-                </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="consent1" required>
+                        <label for="consent1" data-en="I confirm that all information provided is accurate and true." data-sw="Ninakubali kwamba taarifa zote zilizowasilishwa ni sahihi na za kweli.">I confirm that all information provided is accurate and true.</label>
+                    </div>
 
-                <div class="form-group">
-                    <label>Monthly Income (KSH) <span>*</span></label>
-                    <input type="number" id="monthlyIncome" required placeholder="e.g., 50000" min="10000">
-                </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="consent2" required>
+                        <label for="consent2" data-en="I agree to the Terms & Conditions and Privacy Policy." data-sw="Ninakubali Masharti na Vigezo na Sera ya Faragha.">I agree to the Terms & Conditions and Privacy Policy.</label>
+                    </div>
 
-                <div class="form-group">
-                    <label>Employment Status <span>*</span></label>
-                    <select id="employmentStatus" required>
-                        <option value="">Select employment status</option>
-                        <option value="employed">Employed</option>
-                        <option value="self-employed">Self-Employed</option>
-                        <option value="business">Business Owner</option>
-                    </select>
-                </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="consent3" required>
+                        <label for="consent3" data-en="I authorize Swift Loan Limited to process my credit information." data-sw="Ninaidhinisha Swift Loan Limited kuchakata taarifa zangu za mkopo.">I authorize Swift Loan Limited to process my credit information.</label>
+                    </div>
 
-                <div class="form-group">
-                    <label>Loan Purpose <span>*</span></label>
-                    <select id="loanPurpose" required>
-                        <option value="">Select loan purpose</option>
-                        <option value="business">Business</option>
-                        <option value="personal">Personal Use</option>
-                        <option value="education">Education</option>
-                        <option value="emergency">Emergency</option>
-                        <option value="other">Other</option>
-                    </select>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="prevSection()" data-en="Back" data-sw="Rudi">Back</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn" data-en="Submit Application" data-sw="Wasilisha Ombi">Submit Application</button>
+                    </div>
                 </div>
-
-                <button type="submit" class="btn">Continue to Offers</button>
-                <a href="index.html" class="back-link">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
-                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                    </svg>
-                    Back to Home
-                </a>
             </form>
         </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <div class="loading-text">
-            <p id="loadingText">Checking your eligibility...</p>
-            <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">Please wait</p>
+    <!-- Error Modal -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <div class="modal-icon error">!</div>
+            <h3 class="modal-title" data-en="Validation Error" data-sw="Kosa la Uthibitishaji">Validation Error</h3>
+            <p class="modal-text" id="errorText"></p>
+            <button class="modal-close" onclick="closeModal('errorModal')" data-en="OK" data-sw="Sawa">OK</button>
         </div>
     </div>
 
+    <!-- Processing Modal -->
+    <div class="processing-modal" id="processingModal">
+        <div class="processing-content">
+            <h3 class="modal-title" data-en="Processing Your Application" data-sw="Kuchakata Ombi Lako">Processing Your Application</h3>
+            <div class="processing-steps">
+                <div class="processing-step" id="step1">
+                    <div class="step-icon">
+                        <div class="spinner"></div>
+                        <div class="checkmark">✓</div>
+                    </div>
+                    <div class="step-text" data-en="Validating Information..." data-sw="Kuthibitisha Taarifa...">Validating Information...</div>
+                </div>
+                <div class="processing-step" id="step2">
+                    <div class="step-icon">
+                        <div class="spinner"></div>
+                        <div class="checkmark">✓</div>
+                    </div>
+                    <div class="step-text" data-en="Checking Credit Score..." data-sw="Kuangalia Alama ya Mkopo...">Checking Credit Score...</div>
+                </div>
+                <div class="processing-step" id="step3">
+                    <div class="step-icon">
+                        <div class="spinner"></div>
+                        <div class="checkmark">✓</div>
+                    </div>
+                    <div class="step-text" data-en="Calculating Offers..." data-sw="Kukokotoa Matoleo...">Calculating Offers...</div>
+                </div>
+                <div class="processing-step" id="step4">
+                    <div class="step-icon">
+                        <div class="spinner"></div>
+                        <div class="checkmark">✓</div>
+                    </div>
+                    <div class="step-text" data-en="Finalizing..." data-sw="Kukamilisha...">Finalizing...</div>
+                </div>
+            </div>
+            <div class="processing-time" id="processingTime"></div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="successSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBR03jdXwzHwvBQ== " type="audio/wav">
+    </audio>
+    <audio id="errorSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRhQEAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YfADAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+Dyvmw=" type="audio/wav">
+    </audio>
+
     <script>
+        let currentSection = 1;
+        let currentLang = 'en';
+        let startTime;
+
         // Check if user already applied
-        window.addEventListener('DOMContentLoaded', function() {
-            const userData = localStorage.getItem('swiftLoanUser');
-            
+        window.addEventListener('load', () => {
+            const userData = localStorage.getItem('swiftLoanUserData');
             if (userData) {
-                const user = JSON.parse(userData);
-                // If user has already completed eligibility and has offers
-                if (user.eligibilityComplete && user.hasApplication) {
-                    // Redirect to withdrawal page
+                const userObj = JSON.parse(userData);
+                if (userObj.applicationStatus === 'approved') {
                     window.location.href = 'loan-withdrawal.html';
-                    return;
+                } else if (userObj.applicationStatus === 'pending') {
+                    window.location.href = 'offers.html';
                 }
+            }
+            localStorage.setItem('swiftLoanLastPage', 'eligibility.html');
+        });
+
+        function nextSection() {
+            if (validateCurrentSection()) {
+                currentSection++;
+                updateProgress();
+                playSound('success');
+            }
+        }
+
+        function prevSection() {
+            currentSection--;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelector(`.form-section[data-section="${currentSection}"]`).classList.add('active');
+
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentSection) {
+                    step.classList.add('completed');
+                } else if (index + 1 === currentSection) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        function validateCurrentSection() {
+            let isValid = true;
+            let errors = [];
+
+            if (currentSection === 1) {
+                const fullName = document.getElementById('fullName').value.trim();
+                const idNumber = document.getElementById('idNumber').value.trim();
+                const dob = document.getElementById('dob').value;
+                const phone = document.getElementById('phone').value.trim();
+                const email = document.getElementById('email').value.trim();
+
+                if (fullName.length < 3) {
+                    errors.push('Full name must be at least 3 characters');
+                    showFieldError('fullName', 'Please enter your full name');
+                    isValid = false;
+                } else {
+                    clearFieldError('fullName');
+                }
+
+                if (!/^\d{7,8}$/.test(idNumber)) {
+                    errors.push('Invalid National ID number format');
+                    showFieldError('idNumber', 'ID must be 7-8 digits');
+                    isValid = false;
+                } else {
+                    clearFieldError('idNumber');
+                }
+
+                if (!dob) {
+                    errors.push('Date of birth is required');
+                    showFieldError('dob', 'Please enter your date of birth');
+                    isValid = false;
+                } else {
+                    const age = calculateAge(new Date(dob));
+                    if (age < 18) {
+                        errors.push('You must be at least 18 years old');
+                        showFieldError('dob', 'Must be 18 years or older');
+                        isValid = false;
+                    } else {
+                        clearFieldError('dob');
+                    }
+                }
+
+                if (!/^07\d{8}$/.test(phone)) {
+                    errors.push('Invalid phone number format');
+                    showFieldError('phone', 'Phone must be in format 07XXXXXXXX');
+                    isValid = false;
+                } else {
+                    clearFieldError('phone');
+                }
+
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    errors.push('Invalid email address');
+                    showFieldError('email', 'Please enter a valid email');
+                    isValid = false;
+                } else {
+                    clearFieldError('email');
+                }
+            }
+
+            if (currentSection === 2) {
+                const employment = document.getElementById('employment').value;
+                const income = parseInt(document.getElementById('income').value);
+                const loanAmount = parseInt(document.getElementById('loanAmount').value);
+                const loanPurpose = document.getElementById('loanPurpose').value;
+                const county = document.getElementById('county').value.trim();
+
+                if (!employment) {
+                    errors.push('Employment status is required');
+                    showFieldError('employment', 'Please select your employment status');
+                    isValid = false;
+                } else {
+                    clearFieldError('employment');
+                }
+
+                if (!income || income < 5000) {
+                    errors.push('Monthly income must be at least KSh 5,000');
+                    showFieldError('income', 'Minimum income: KSh 5,000');
+                    isValid = false;
+                } else {
+                    clearFieldError('income');
+                }
+
+                if (!loanAmount || loanAmount < 1000 || loanAmount > 5000000) {
+                    errors.push('Loan amount must be between KSh 1,000 and KSh 5,000,000');
+                    showFieldError('loanAmount', 'Amount: KSh 1,000 - 5,000,000');
+                    isValid = false;
+                } else if (loanAmount > income * 10) {
+                    errors.push('Requested loan amount exceeds maximum based on your income');
+                    showFieldError('loanAmount', 'Amount too high for your income');
+                    isValid = false;
+                } else {
+                    clearFieldError('loanAmount');
+                }
+
+                if (!loanPurpose) {
+                    errors.push('Loan purpose is required');
+                    showFieldError('loanPurpose', 'Please select loan purpose');
+                    isValid = false;
+                } else {
+                    clearFieldError('loanPurpose');
+                }
+
+                if (county.length < 3) {
+                    errors.push('County is required');
+                    showFieldError('county', 'Please enter your county');
+                    isValid = false;
+                } else {
+                    clearFieldError('county');
+                }
+            }
+
+            if (currentSection === 3) {
+                const consent1 = document.getElementById('consent1').checked;
+                const consent2 = document.getElementById('consent2').checked;
+                const consent3 = document.getElementById('consent3').checked;
+
+                if (!consent1 || !consent2 || !consent3) {
+                    errors.push('You must accept all consent terms to proceed');
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                showErrorModal(errors.join('\n'));
+                playSound('error');
+            }
+
+            return isValid;
+        }
+
+        function showFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorSpan = document.getElementById(fieldId + 'Error');
+            field.classList.add('error');
+            errorSpan.textContent = message;
+            errorSpan.classList.add('show');
+        }
+
+        function clearFieldError(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorSpan = document.getElementById(fieldId + 'Error');
+            field.classList.remove('error');
+            errorSpan.classList.remove('show');
+        }
+
+        function showErrorModal(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function calculateAge(birthDate) {
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        function playSound(type) {
+            const sound = document.getElementById(type + 'Sound');
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log('Audio play failed:', e));
+            }
+        }
+
+        // Form submission
+        document.getElementById('loanForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (validateCurrentSection()) {
+                // Save data to localStorage
+                const formData = {
+                    fullName: document.getElementById('fullName').value.trim(),
+                    idNumber: document.getElementById('idNumber').value.trim(),
+                    dob: document.getElementById('dob').value,
+                    phone: document.getElementById('phone').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    employment: document.getElementById('employment').value,
+                    income: parseInt(document.getElementById('income').value),
+                    loanAmount: parseInt(document.getElementById('loanAmount').value),
+                    loanPurpose: document.getElementById('loanPurpose').value,
+                    county: document.getElementById('county').value.trim(),
+                    applicationDate: new Date().toISOString(),
+                    applicationStatus: 'pending'
+                };
+
+                localStorage.setItem('swiftLoanUserData', JSON.stringify(formData));
                 
-                // Pre-fill form if user data exists
-                if (user.fullName) document.getElementById('fullName').value = user.fullName;
-                if (user.phoneNumber) document.getElementById('phoneNumber').value = user.phoneNumber;
-                if (user.idNumber) document.getElementById('idNumber').value = user.idNumber;
-                if (user.email) document.getElementById('email').value = user.email;
-                if (user.monthlyIncome) document.getElementById('monthlyIncome').value = user.monthlyIncome;
-                if (user.employmentStatus) document.getElementById('employmentStatus').value = user.employmentStatus;
-                if (user.loanPurpose) document.getElementById('loanPurpose').value = user.loanPurpose;
+                // Show processing animation
+                startTime = Date.now();
+                document.getElementById('processingModal').classList.add('active');
+                processApplication();
             }
         });
 
-        // Form submission
-        document.getElementById('eligibilityForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const errorMessage = document.getElementById('errorMessage');
-            errorMessage.classList.remove('show');
-            
-            // Get form values
-            const fullName = document.getElementById('fullName').value.trim();
-            const phoneNumber = document.getElementById('phoneNumber').value.trim();
-            const idNumber = document.getElementById('idNumber').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const monthlyIncome = parseInt(document.getElementById('monthlyIncome').value);
-            const employmentStatus = document.getElementById('employmentStatus').value;
-            const loanPurpose = document.getElementById('loanPurpose').value;
-            
-            // Validate
-            if (!fullName || !phoneNumber || !idNumber || !email || !monthlyIncome || !employmentStatus || !loanPurpose) {
-                errorMessage.textContent = 'Please fill in all required fields.';
-                errorMessage.classList.add('show');
-                return;
-            }
-            
-            // Validate phone number
-            if (!/^[0-9]{10}$/.test(phoneNumber)) {
-                errorMessage.textContent = 'Please enter a valid 10-digit phone number.';
-                errorMessage.classList.add('show');
-                return;
-            }
-            
-            // Validate minimum income
-            if (monthlyIncome < 10000) {
-                errorMessage.textContent = 'Minimum monthly income requirement is KSH 10,000.';
-                errorMessage.classList.add('show');
-                return;
-            }
-            
-            // Create user data object
-            const userData = {
-                fullName,
-                phoneNumber,
-                idNumber,
-                email,
-                monthlyIncome,
-                employmentStatus,
-                loanPurpose,
-                eligibilityComplete: true,
-                applicationDate: new Date().toISOString()
-            };
-            
-            // Store user data
-            localStorage.setItem('swiftLoanUser', JSON.stringify(userData));
-            
-            // Show loading spinner
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const loadingText = document.getElementById('loadingText');
-            loadingOverlay.classList.add('show');
-            
-            // Simulate checking eligibility
-            setTimeout(function() {
-                loadingText.textContent = 'Calculating your loan offers...';
-            }, 1500);
-            
-            setTimeout(function() {
-                loadingText.textContent = 'Almost done...';
-            }, 2500);
-            
-            // Redirect to offers page after 3.5 seconds
-            setTimeout(function() {
-                window.location.href = 'offers.html';
-            }, 3500);
-        });
+        function processApplication() {
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            let currentStep = 0;
+
+            const processInterval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    const stepElement = document.getElementById(steps[currentStep]);
+                    stepElement.classList.add('active');
+                    
+                    setTimeout(() => {
+                        stepElement.classList.remove('active');
+                        stepElement.classList.add('completed');
+                        currentStep++;
+                        
+                        if (currentStep === steps.length) {
+                            clearInterval(processInterval);
+                            const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+                            document.getElementById('processingTime').textContent = `Completed in ${timeTaken} seconds`;
+                            
+                            playSound('success');
+                            
+                            setTimeout(() => {
+                                localStorage.setItem('swiftLoanLastPage', 'offers.html');
+                                window.location.href = 'offers.html';
+                            }, 2000);
+                        }
+                    }, 1200);
+                }
+            }, 1300);
+        }
     </script>
 </body>
-  </html>
+    </html>
