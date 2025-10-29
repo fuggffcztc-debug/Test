@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftWallet - Loan Withdrawal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #001f5c 0%, #003d8f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%);
+            color: #fff;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .step.active {
+            background: #ff6b35;
+            color: #fff;
+        }
+
+        .step.completed {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        .wallet-balance {
+            background: linear-gradient(135deg, #001f5c 0%, #003d8f 100%);
+            color: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .wallet-balance h3 {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .loan-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row span:first-child {
+            color: #666;
+        }
+
+        .detail-row span:last-child {
+            font-weight: 600;
+            color: #001f5c;
+        }
+
+        .fee-highlight {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .fee-highlight h3 {
+            color: #e65100;
+            margin-bottom: 0.5rem;
+        }
+
+        .fee-highlight p {
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .fee-amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-top: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        label span {
+            color: #ff6b35;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .consent-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .consent-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .consent-checkbox label {
+            cursor: pointer;
+            color: #555;
+            line-height: 1.6;
+            font-weight: normal;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76,175,80,0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #001f5c;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #ff6b35;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4caf50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #fff;
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: #2196f3;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 12px;
+            margin-left: 5px;
+            cursor: help;
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .balance-amount {
+                font-size: 2rem;
+            }
+
+            .fee-amount {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <svg width="30" height="30" fill="#fff" viewBox="0 0 16 16" style="vertical-align: middle;">
+                    <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v2h6a.5.5 0 0 1 .5.5c0 .253.08.644.306.958.207.288.557.542 1.194.542.637 0 .987-.254 1.194-.542.226-.314.306-.705.306-.958a.5.5 0 0 1 .5-.5h6v-2A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                    <path d="M16 6.5h-5.551a2.678 2.678 0 0 1-.443 1.042C9.613 8.088 8.963 8.5 8 8.5c-.963 0-1.613-.412-2.006-.958A2.679 2.679 0 0 1 5.551 6.5H0v6A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-6z"/>
+                </svg>
+                SwiftWallet
+            </h1>
+            <p>Withdraw Your Loan</p>
+        </div>
+
+        <div class="content">
+            <div class="step-indicator">
+                <div class="step completed">1</div>
+                <div class="step completed">2</div>
+                <div class="step active">3</div>
+            </div>
+
+            <div class="wallet-balance">
+                <h3>Available Balance</h3>
+                <div class="balance-amount">KSH <span id="balanceAmount">0</span></div>
+            </div>
+
+            <div class="loan-details">
+                <div class="detail-row">
+                    <span>Applicant Name:</span>
+                    <span id="detailName">-</span>
+                </div>
+                <div class="detail-row">
+                    <span>Phone Number:</span>
+                    <span id="detailPhone">-</span>
+                </div>
+                <div class="detail-row">
+                    <span>ID Number:</span>
+                    <span id="detailId">-</span>
+                </div>
+                <div class="detail-row">
+                    <span>Loan Amount:</span>
+                    <span id="detailAmount">-</span>
+                </div>
+                <div class="detail-row">
+                    <span>Repayment Period:</span>
+                    <span id="detailTerm">-</span>
+                </div>
+            </div>
+
+            <div class="fee-highlight">
+                <h3>
+                    <svg width="20" height="20" fill="#e65100" viewBox="0 0 16 16" style="vertical-align: middle;">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    </svg>
+                    Processing Fee Required
+                </h3>
+                <p>To withdraw your loan, you need to pay a one-time processing fee:</p>
+                <div class="fee-amount">KSH <span id="feeAmount">0</span></div>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">This fee covers loan processing, verification, and administrative costs.</p>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <form id="withdrawalForm">
+                <div class="form-group">
+                    <label>M-Pesa Phone Number <span>*</span></label>
+                    <input type="tel" id="mpesaPhone" required placeholder="e.g., 0712345678" pattern="[0-9]{10}">
+                    <small style="color: #666; font-size: 0.85rem;">Enter the M-Pesa number to receive the STK push</small>
+                </div>
+
+                <div class="consent-checkbox">
+                    <input type="checkbox" id="consentPayment">
+                    <label for="consentPayment">
+                        I authorize Swift Loan Limited to initiate an M-Pesa payment request of KSH <strong id="consentFee">0</strong> as processing fee for my loan. I understand this is a one-time, non-refundable fee.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn" disabled>
+                    <svg width="20" height="20" fill="#fff" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 8px;">
+                        <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>
+                    </svg>
+                    Request STK Push
+                </button>
+                <a href="index.html" class="back-link">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                    Back to Home
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">
+            <p id="loadingText">Initiating M-Pesa payment...</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">Please wait</p>
+        </div>
+    </div>
+
+    <script>
+        let userData = null;
+
+        // Load user data
+        window.addEventListener('DOMContentLoaded', function() {
+            const userDataStr = localStorage.getItem('swiftLoanUser');
+            
+            if (!userDataStr) {
+                window.location.href = 'eligibility.html';
+                return;
+            }
+            
+            userData = JSON.parse(userDataStr);
+            
+            // Check if user has a selected offer
+            if (!userData.selectedOffer) {
+                window.location.href = 'eligibility.html';
+                return;
+            }
+            
+            // Display loan details
+            document.getElementById('balanceAmount').textContent = userData.balance.toLocaleString();
+            document.getElementById('detailName').textContent = userData.fullName;
+            document.getElementById('detailPhone').textContent = userData.phoneNumber;
+            document.getElementById('detailId').textContent = userData.idNumber;
+            document.getElementById('detailAmount').textContent = 'KSH ' + userData.selectedOffer.amount.toLocaleString();
+            document.getElementById('detailTerm').textContent = userData.selectedOffer.term;
+            document.getElementById('feeAmount').textContent = userData.selectedOffer.fee.toLocaleString();
+            document.getElementById('consentFee').textContent = userData.selectedOffer.fee.toLocaleString();
+            
+            // Pre-fill M-Pesa phone with user's phone
+            document.getElementById('mpesaPhone').value = userData.phoneNumber;
+        });
+
+        // Enable/disable submit button based on consent
+        document.getElementById('consentPayment').addEventListener('change', function() {
+            document.getElementById('submitBtn').disabled = !this.checked;
+        });
+
+        // Form submission
+        document.getElementById('withdrawalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            
+            const mpesaPhone = document.getElementById('mpesaPhone').value.trim();
+            const consentPayment = document.getElementById('consentPayment').checked;
+            
+            // Validate
+            if (!mpesaPhone || !/^[0-9]{10}$/.test(mpesaPhone)) {
+                errorMessage.textContent = 'Please enter a valid 10-digit M-Pesa phone number.';
+                errorMessage.classList.add('show');
+                return;
+            }
+            
+            if (!consentPayment) {
+                errorMessage.textContent = 'Please consent to the payment authorization.';
+                errorMessage.classList.add('show');
+                return;
+            }
+            
+            // Show loading overlay
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            loadingOverlay.classList.add('show');
+            
+            // Prepare payment data
+            const paymentData = {
+                phone: mpesaPhone,
+                amount: userData.selectedOffer.fee,
+                accountReference: 'SWIFTLOAN-' + userData.idNumber,
+                description: 'Swift Loan Processing Fee',
+                callbackUrl: 'https://swiftcapitalportal.onrender.com'
+            };
+            
+            // Simulate STK push request
+            setTimeout(function() {
+                loadingText.textContent = 'Sending STK push to ' + mpesaPhone + '...';
+            }, 1000);
+            
+            setTimeout(function() {
+                loadingText.textContent = 'Waiting for payment confirmation...';
+            }, 2500);
+            
+            // In a real implementation, you would make an API call to the M-Pesa STK push endpoint
+            // For demonstration, we'll simulate the process
+            setTimeout(function() {
+                // Simulate successful payment
+                loadingOverlay.classList.remove('show');
+                
+                successMessage.innerHTML = `
+                    <svg width="24" height="24" fill="#2e7d32" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 8px;">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </svg>
+                    <strong>STK Push Sent Successfully!</strong><br>
+                    Please check your phone and enter your M-Pesa PIN to complete the payment.
+                    Once payment is confirmed, your loan will be disbursed to your account.
+                `;
+                successMessage.classList.add('show');
+                
+                // Update user data
+                userData.paymentInitiated = true;
+                userData.paymentPhone = mpesaPhone;
+                userData.paymentDate = new Date().toISOString();
+                localStorage.setItem('swiftLoanUser', JSON.stringify(userData));
+                
+                // Disable form
+                document.getElementById('submitBtn').disabled = true;
+                document.getElementById('submitBtn').textContent = 'Payment Request Sent';
+                
+            }, 4000);
+        });
+
+        // Note: In production, you would integrate with actual M-Pesa API
+        // Example API call structure (pseudo-code):
+        /*
+        async function initiateSTKPush(paymentData) {
+            try {
+                const response = await fetch('https://swiftcapitalportal.onrender.com/api/mpesa/stk-push', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(paymentData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Handle success
+                    return { success: true, data: result };
+                } else {
+                    // Handle error
+                    return { success: false, error: result.message };
+                }
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+        */
+    </script>
+</body>
+</html>
