@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Application - Swift Loan Limited</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #001f5c 0%, #003d8f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #001f5c;
+            color: #fff;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .logo-text span {
+            color: #ff6b35;
+        }
+
+        .header p {
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .step.active {
+            background: #ff6b35;
+            color: #fff;
+        }
+
+        .step.completed {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        h2 {
+            color: #001f5c;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        label span {
+            color: #ff6b35;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: #ff6b35;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #001f5c;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #ff6b35;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ff6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #fff;
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            color: #1565c0;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: 1.5rem;
+            }
+
+            .header {
+                padding: 1.5rem;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-text">Swift<span>Loan</span></div>
+            <p>Loan Application Form</p>
+        </div>
+
+        <div class="content">
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+            </div>
+
+            <h2>Check Your Eligibility</h2>
+
+            <div class="info-box">
+                <p>
+                    <svg width="16" height="16" fill="#2196f3" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 5px;">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    </svg>
+                    Please provide accurate information to help us process your loan application quickly.
+                </p>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="eligibilityForm">
+                <div class="form-group">
+                    <label>Full Name <span>*</span></label>
+                    <input type="text" id="fullName" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number <span>*</span></label>
+                    <input type="tel" id="phoneNumber" required placeholder="e.g., 0712345678" pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-group">
+                    <label>ID Number <span>*</span></label>
+                    <input type="text" id="idNumber" required placeholder="Enter your National ID number">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address <span>*</span></label>
+                    <input type="email" id="email" required placeholder="your.email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Monthly Income (KSH) <span>*</span></label>
+                    <input type="number" id="monthlyIncome" required placeholder="e.g., 50000" min="10000">
+                </div>
+
+                <div class="form-group">
+                    <label>Employment Status <span>*</span></label>
+                    <select id="employmentStatus" required>
+                        <option value="">Select employment status</option>
+                        <option value="employed">Employed</option>
+                        <option value="self-employed">Self-Employed</option>
+                        <option value="business">Business Owner</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Loan Purpose <span>*</span></label>
+                    <select id="loanPurpose" required>
+                        <option value="">Select loan purpose</option>
+                        <option value="business">Business</option>
+                        <option value="personal">Personal Use</option>
+                        <option value="education">Education</option>
+                        <option value="emergency">Emergency</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">Continue to Offers</button>
+                <a href="index.html" class="back-link">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                    Back to Home
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">
+            <p id="loadingText">Checking your eligibility...</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">Please wait</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if user already applied
+        window.addEventListener('DOMContentLoaded', function() {
+            const userData = localStorage.getItem('swiftLoanUser');
+            
+            if (userData) {
+                const user = JSON.parse(userData);
+                // If user has already completed eligibility and has offers
+                if (user.eligibilityComplete && user.hasApplication) {
+                    // Redirect to withdrawal page
+                    window.location.href = 'loan-withdrawal.html';
+                    return;
+                }
+                
+                // Pre-fill form if user data exists
+                if (user.fullName) document.getElementById('fullName').value = user.fullName;
+                if (user.phoneNumber) document.getElementById('phoneNumber').value = user.phoneNumber;
+                if (user.idNumber) document.getElementById('idNumber').value = user.idNumber;
+                if (user.email) document.getElementById('email').value = user.email;
+                if (user.monthlyIncome) document.getElementById('monthlyIncome').value = user.monthlyIncome;
+                if (user.employmentStatus) document.getElementById('employmentStatus').value = user.employmentStatus;
+                if (user.loanPurpose) document.getElementById('loanPurpose').value = user.loanPurpose;
+            }
+        });
+
+        // Form submission
+        document.getElementById('eligibilityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.classList.remove('show');
+            
+            // Get form values
+            const fullName = document.getElementById('fullName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const idNumber = document.getElementById('idNumber').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const monthlyIncome = parseInt(document.getElementById('monthlyIncome').value);
+            const employmentStatus = document.getElementById('employmentStatus').value;
+            const loanPurpose = document.getElementById('loanPurpose').value;
+            
+            // Validate
+            if (!fullName || !phoneNumber || !idNumber || !email || !monthlyIncome || !employmentStatus || !loanPurpose) {
+                errorMessage.textContent = 'Please fill in all required fields.';
+                errorMessage.classList.add('show');
+                return;
+            }
+            
+            // Validate phone number
+            if (!/^[0-9]{10}$/.test(phoneNumber)) {
+                errorMessage.textContent = 'Please enter a valid 10-digit phone number.';
+                errorMessage.classList.add('show');
+                return;
+            }
+            
+            // Validate minimum income
+            if (monthlyIncome < 10000) {
+                errorMessage.textContent = 'Minimum monthly income requirement is KSH 10,000.';
+                errorMessage.classList.add('show');
+                return;
+            }
+            
+            // Create user data object
+            const userData = {
+                fullName,
+                phoneNumber,
+                idNumber,
+                email,
+                monthlyIncome,
+                employmentStatus,
+                loanPurpose,
+                eligibilityComplete: true,
+                applicationDate: new Date().toISOString()
+            };
+            
+            // Store user data
+            localStorage.setItem('swiftLoanUser', JSON.stringify(userData));
+            
+            // Show loading spinner
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            loadingOverlay.classList.add('show');
+            
+            // Simulate checking eligibility
+            setTimeout(function() {
+                loadingText.textContent = 'Calculating your loan offers...';
+            }, 1500);
+            
+            setTimeout(function() {
+                loadingText.textContent = 'Almost done...';
+            }, 2500);
+            
+            // Redirect to offers page after 3.5 seconds
+            setTimeout(function() {
+                window.location.href = 'offers.html';
+            }, 3500);
+        });
+    </script>
+</body>
+  </html>
