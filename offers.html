@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your loan offers from Swift Loan Limited">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="favicon.png">
     <title>Loan Offers - Swift Loan Limited</title>
+    
     <style>
         * {
             margin: 0;
@@ -11,527 +15,847 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f8f9fa;
-            min-height: 100vh;
-            padding: 20px;
+        :root {
+            --primary-orange: #FF6B00;
+            --primary-blue: #001F5C;
+            --light-gray: #F5F5F5;
+            --text-dark: #333;
+            --white: #FFFFFF;
+            --success-green: #28a745;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-gray);
+            min-height: 100vh;
+            padding-bottom: 2rem;
         }
 
         .header {
-            background: #001f5c;
-            color: #fff;
-            padding: 2rem;
-            border-radius: 15px 15px 0 0;
-            text-align: center;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #003580 100%);
+            color: var(--white);
+            padding: 1.5rem 5%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo-text {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            font-style: italic;
         }
 
         .logo-text span {
-            color: #ff6b35;
+            color: var(--primary-orange);
         }
 
-        .content {
-            background: #fff;
-            padding: 2.5rem;
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        .profile-section {
+            max-width: 1200px;
+            margin: -40px auto 2rem;
+            padding: 0 5%;
         }
 
-        .step-indicator {
+        .profile-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            align-items: center;
+            gap: 2rem;
         }
 
-        .step {
-            width: 40px;
-            height: 40px;
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            background: #e0e0e0;
+            background: linear-gradient(135deg, var(--primary-orange), #ff8534);
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--white);
+            font-size: 2.5rem;
             font-weight: bold;
-            color: #666;
-        }
-
-        .step.active {
-            background: #ff6b35;
-            color: #fff;
-        }
-
-        .step.completed {
-            background: #4caf50;
-            color: #fff;
-        }
-
-        .user-info {
-            background: #e3f2fd;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            border-left: 4px solid #2196f3;
-        }
-
-        .user-info h3 {
-            color: #001f5c;
-            margin-bottom: 1rem;
-        }
-
-        .user-detail {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(33, 150, 243, 0.2);
-        }
-
-        .user-detail:last-child {
-            border-bottom: none;
-        }
-
-        .user-detail span:first-child {
-            font-weight: 500;
-            color: #1565c0;
-        }
-
-        .offers-title {
-            text-align: center;
-            color: #001f5c;
-            margin-bottom: 2rem;
-        }
-
-        .offers-grid {
-            display: grid;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .offer-card {
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s;
             cursor: pointer;
+            transition: 0.3s;
             position: relative;
+            overflow: hidden;
         }
 
-        .offer-card:hover {
-            border-color: #ff6b35;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(255,107,53,0.2);
+        .profile-avatar:hover {
+            transform: scale(1.05);
         }
 
-        .offer-card.selected {
-            border-color: #ff6b35;
-            background: #fff5f2;
-            box-shadow: 0 5px 20px rgba(255,107,53,0.3);
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .offer-badge {
-            position: absolute;
-            top: -12px;
-            right: 20px;
-            background: #ff6b35;
-            color: #fff;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
+        .profile-info {
+            flex: 1;
         }
 
-        .offer-amount {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #001f5c;
-            margin-bottom: 1rem;
+        .profile-name {
+            font-size: 1.8rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
         }
 
-        .offer-details {
+        .profile-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
 
-        .offer-detail {
+        .detail-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .offer-detail svg {
-            flex-shrink: 0;
+        .detail-label {
+            color: #666;
+            font-size: 0.9rem;
         }
 
-        .offer-detail span {
+        .detail-value {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .content-area {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: var(--primary-orange);
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .offer-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .offer-card.selected {
+            border-color: var(--primary-orange);
+        }
+
+        .offer-amount {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .offer-amount span {
+            font-size: 1.2rem;
             color: #666;
         }
 
-        .consent-section {
+        .offer-details {
+            margin: 1.5rem 0;
+        }
+
+        .offer-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .offer-detail-label {
+            color: #666;
+        }
+
+        .offer-detail-value {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .offer-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
             background: #fff3e0;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 2rem 0;
-            border-left: 4px solid #ff9800;
+            color: var(--primary-orange);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .select-offer-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-orange);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 1rem;
+        }
+
+        .select-offer-btn:hover {
+            background: #ff8534;
+        }
+
+        .select-offer-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .chart-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+        }
+
+        .legend-text {
+            flex: 1;
+        }
+
+        .legend-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .legend-value {
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--primary-orange);
+            transform: rotate(90deg);
+        }
+
+        .user-detail-item {
+            padding: 1rem;
+            background: var(--light-gray);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .user-detail-item strong {
+            color: var(--primary-blue);
+        }
+
+        .delete-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #dc3545;
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .confirm-modal-content {
+            text-align: center;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .confirm-buttons button {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .consent-modal .modal-content {
+            max-width: 600px;
+        }
+
+        .consent-text {
+            line-height: 1.8;
+            color: #666;
+            margin: 1rem 0;
         }
 
         .consent-checkbox {
             display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-top: 1rem;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
         }
 
-        .consent-checkbox input[type="checkbox"] {
+        .consent-checkbox input {
             width: 20px;
             height: 20px;
-            cursor: pointer;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .consent-checkbox label {
-            cursor: pointer;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            background: #ff6b35;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn:hover:not(:disabled) {
-            background: #e55a2b;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
-        }
-
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 1rem;
-            color: #001f5c;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            color: #ff6b35;
-        }
-
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: none;
-            text-align: center;
-        }
-
-        .error-message.show {
-            display: block;
         }
 
         @media (max-width: 768px) {
-            .content {
-                padding: 1.5rem;
-            }
-
-            .offer-amount {
-                font-size: 1.5rem;
-            }
-
-            .user-detail {
+            .profile-card {
                 flex-direction: column;
-                gap: 0.3rem;
+                text-align: center;
+            }
+
+            .profile-details {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .offers-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo-text">Swift<span>Loan</span></div>
-            <p>Your Personalized Loan Offers</p>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo-text"><span>Swift</span> Loan</div>
+            <div data-en="Your Loan Offers" data-sw="Matoleo Yako ya Mikopo">Your Loan Offers</div>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <div class="profile-card">
+            <div class="profile-avatar" id="profileAvatar" onclick="showProfile()">
+                <div id="avatarInitials">JD</div>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name" id="userName">John Doe</h1>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <span class="detail-value" id="userPhone">0712345678</span>
+                    </div>
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span class="detail-value" id="userID">12345678</span>
+                    </div>
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span class="detail-value" data-en="Applied today" data-sw="Ameomba leo" id="applicationTime">Applied today</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h2 class="section-title" data-en="Available Loan Offers" data-sw="Matoleo ya Mikopo Yanayopatikana">Available Loan Offers</h2>
+        <div class="offers-grid" id="offersGrid">
+            <!-- Offers will be generated here -->
         </div>
 
-        <div class="content">
-            <div class="step-indicator">
-                <div class="step completed">1</div>
-                <div class="step active">2</div>
-                <div class="step">3</div>
-            </div>
-
-            <div class="user-info">
-                <h3>Applicant Information</h3>
-                <div class="user-detail">
-                    <span>Full Name:</span>
-                    <span id="displayName">-</span>
+        <h2 class="section-title" data-en="Loan Breakdown" data-sw="Mgawanyo wa Mkopo">Loan Breakdown</h2>
+        <div class="chart-section">
+            <div class="chart-container">
+                <div>
+                    <canvas id="pieChart" class="pie-chart"></canvas>
                 </div>
-                <div class="user-detail">
-                    <span>Phone Number:</span>
-                    <span id="displayPhone">-</span>
-                </div>
-                <div class="user-detail">
-                    <span>ID Number:</span>
-                    <span id="displayId">-</span>
-                </div>
-                <div class="user-detail">
-                    <span>Monthly Income:</span>
-                    <span id="displayIncome">-</span>
+                <div class="chart-legend" id="chartLegend">
+                    <!-- Legend will be generated here -->
                 </div>
             </div>
+        </div>
+    </div>
 
-            <h2 class="offers-title">Choose Your Loan Offer</h2>
-
-            <div class="error-message" id="errorMessage"></div>
-
-            <div class="offers-grid" id="offersGrid">
-                <!-- Offers will be dynamically inserted here -->
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-en="My Profile" data-sw="Wasifu Wangu">My Profile</h3>
+                <button class="close-modal" onclick="closeModal('profileModal')">&times;</button>
             </div>
+            <div id="profileDetails"></div>
+            <button class="delete-btn" onclick="confirmDelete()" data-en="Delete My Information" data-sw="Futa Taarifa Zangu">Delete My Information</button>
+        </div>
+    </div>
 
-            <div class="consent-section">
-                <h3 style="color: #e65100; margin-bottom: 1rem;">Terms and Consent</h3>
-                <div class="consent-checkbox">
-                    <input type="checkbox" id="consentTerms">
-                    <label for="consentTerms">
-                        I have read and agree to the Terms and Conditions, Privacy Policy, and loan repayment terms. I understand that a processing fee will be charged and I consent to the collection and processing of my personal information for the purpose of this loan application.
-                    </label>
-                </div>
-                <div class="consent-checkbox" style="margin-top: 1rem;">
-                    <input type="checkbox" id="consentCommunication">
-                    <label for="consentCommunication">
-                        I consent to receive communications from Swift Loan Limited via SMS, email, and phone regarding my loan application and repayment reminders.
-                    </label>
-                </div>
+    <!-- Confirm Delete Modal -->
+    <div class="modal" id="confirmDeleteModal">
+        <div class="modal-content confirm-modal-content">
+            <h3 class="modal-title" data-en="Are You Sure?" data-sw="Una Uhakika?">Are You Sure?</h3>
+            <p data-en="This will delete all your information and you'll need to apply again." data-sw="Hii itafuta taarifa zako zote na utahitaji kuomba tena.">This will delete all your information and you'll need to apply again.</p>
+            <div class="confirm-buttons">
+                <button onclick="closeModal('confirmDeleteModal')" style="background: #6c757d; color: white;" data-en="Cancel" data-sw="Ghairi">Cancel</button>
+                <button onclick="deleteUserData()" style="background: #dc3545; color: white;" data-en="Yes, Delete" data-sw="Ndio, Futa">Yes, Delete</button>
             </div>
+        </div>
+    </div>
 
-            <button class="btn" id="confirmBtn" disabled onclick="confirmLoan()">Confirm and Continue</button>
-            <a href="eligibility.html" class="back-link">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
-                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                </svg>
-                Back to Application
-            </a>
+    <!-- Consent Modal -->
+    <div class="modal consent-modal" id="consentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-en="Loan Confirmation" data-sw="Uthibitisho wa Mkopo">Loan Confirmation</h3>
+                <button class="close-modal" onclick="closeModal('consentModal')">&times;</button>
+            </div>
+            <div class="consent-text" id="consentText"></div>
+            <div class="consent-checkbox">
+                <input type="checkbox" id="finalConsent">
+                <label for="finalConsent" data-en="I confirm and consent to this loan agreement" data-sw="Ninakubali na kukubali mkataba huu wa mkopo">I confirm and consent to this loan agreement</label>
+            </div>
+            <button class="select-offer-btn" id="confirmLoanBtn" onclick="confirmLoan()" data-en="Confirm Loan" data-sw="Thibitisha Mkopo">Confirm Loan</button>
         </div>
     </div>
 
     <script>
+        let userData = {};
         let selectedOffer = null;
-        let userData = null;
 
-        // Load user data and generate offers
-        window.addEventListener('DOMContentLoaded', function() {
-            const userDataStr = localStorage.getItem('swiftLoanUser');
-            
-            if (!userDataStr) {
+        window.addEventListener('load', () => {
+            const storedData = localStorage.getItem('swiftLoanUserData');
+            if (!storedData) {
                 window.location.href = 'eligibility.html';
                 return;
             }
+
+            userData = JSON.parse(storedData);
             
-            userData = JSON.parse(userDataStr);
-            
-            // Display user info
-            document.getElementById('displayName').textContent = userData.fullName;
-            document.getElementById('displayPhone').textContent = userData.phoneNumber;
-            document.getElementById('displayId').textContent = userData.idNumber;
-            document.getElementById('displayIncome').textContent = 'KSH ' + userData.monthlyIncome.toLocaleString();
-            
-            // Generate loan offers based on income
-            generateOffers(userData.monthlyIncome);
+            if (userData.applicationStatus === 'approved') {
+                window.location.href = 'loan-withdrawal.html';
+                return;
+            }
+
+            localStorage.setItem('swiftLoanLastPage', 'offers.html');
+            displayUserInfo();
+            generateOffers();
         });
 
-        function generateOffers(monthlyIncome) {
+        function displayUserInfo() {
+            const initials = userData.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            document.getElementById('avatarInitials').textContent = initials;
+            document.getElementById('userName').textContent = userData.fullName;
+            document.getElementById('userPhone').textContent = userData.phone;
+            document.getElementById('userID').textContent = userData.idNumber;
+
+            const appDate = new Date(userData.applicationDate);
+            const now = new Date();
+            const diffHours = Math.floor((now - appDate) / (1000 * 60 * 60));
+            const diffMins = Math.floor((now - appDate) / (1000 * 60));
+            
+            let timeText = '';
+            if (diffMins < 60) {
+                timeText = `Applied ${diffMins} min${diffMins !== 1 ? 's' : ''} ago`;
+            } else if (diffHours < 24) {
+                timeText = `Applied ${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            } else {
+                timeText = 'Applied today';
+            }
+            document.getElementById('applicationTime').textContent = timeText;
+        }
+
+        function generateOffers() {
+            const income = userData.income;
+            const requestedAmount = userData.loanAmount;
+            
+            const offers = [
+                {
+                    amount: requestedAmount,
+                    term: 12,
+                    fee: calculateFee(requestedAmount),
+                    badge: 'Recommended'
+                },
+                {
+                    amount: Math.floor(requestedAmount * 0.7),
+                    term: 6,
+                    fee: calculateFee(Math.floor(requestedAmount * 0.7)),
+                    badge: 'Quick Repayment'
+                },
+                {
+                    amount: Math.min(requestedAmount * 1.5, income * 5),
+                    term: 18,
+                    fee: calculateFee(Math.min(requestedAmount * 1.5, income * 5)),
+                    badge: 'Maximum Offer'
+                }
+            ];
+
             const offersGrid = document.getElementById('offersGrid');
-            const offers = [];
-            
-            // Calculate loan offers based on monthly income
-            // Typically 1-3 times monthly income
-            const baseAmount1 = Math.floor(monthlyIncome * 0.5 / 500) * 500; // 50% of income
-            const baseAmount2 = Math.floor(monthlyIncome * 1 / 500) * 500; // 100% of income
-            const baseAmount3 = Math.floor(monthlyIncome * 2 / 500) * 500; // 200% of income
-            
-            // Calculate fees (progressive - higher loans have lower fee percentages but higher absolute fees)
-            const fee1 = calculateFee(baseAmount1);
-            const fee2 = calculateFee(baseAmount2);
-            const fee3 = calculateFee(baseAmount3);
-            
-            offers.push({
-                id: 1,
-                amount: baseAmount1,
-                fee: fee1,
-                term: '3 months',
-                badge: 'Quick Cash',
-                recommended: false
-            });
-            
-            offers.push({
-                id: 2,
-                amount: baseAmount2,
-                fee: fee2,
-                term: '6 months',
-                badge: 'Most Popular',
-                recommended: true
-            });
-            
-            offers.push({
-                id: 3,
-                amount: baseAmount3,
-                fee: fee3,
-                term: '12 months',
-                badge: 'Maximum',
-                recommended: false
-            });
-            
-            // Render offers
-            offers.forEach(offer => {
-                const card = createOfferCard(offer);
+            offersGrid.innerHTML = '';
+
+            offers.forEach((offer, index) => {
+                const interest = calculateInterest(offer.amount, offer.term);
+                const total = offer.amount + interest;
+                const monthly = Math.round(total / offer.term);
+
+                const card = document.createElement('div');
+                card.className = 'offer-card';
+                card.innerHTML = `
+                    <div class="offer-badge">${offer.badge}</div>
+                    <div class="offer-amount">KSh ${offer.amount.toLocaleString()}</div>
+                    <div class="offer-details">
+                        <div class="offer-detail-row">
+                            <span class="offer-detail-label">Loan Term</span>
+                            <span class="offer-detail-value">${offer.term} months</span>
+                        </div>
+                        <div class="offer-detail-row">
+                            <span class="offer-detail-label">Interest (7%)</span>
+                            <span class="offer-detail-value">KSh ${interest.toLocaleString()}</span>
+                        </div>
+                        <div class="offer-detail-row">
+                            <span class="offer-detail-label">Processing Fee</span>
+                            <span class="offer-detail-value">KSh ${offer.fee.toLocaleString()}</span>
+                        </div>
+                        <div class="offer-detail-row">
+                            <span class="offer-detail-label">Total Repayment</span>
+                            <span class="offer-detail-value">KSh ${total.toLocaleString()}</span>
+                        </div>
+                        <div class="offer-detail-row">
+                            <span class="offer-detail-label">Monthly Payment</span>
+                            <span class="offer-detail-value">KSh ${monthly.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <button class="select-offer-btn" onclick="selectOffer(${index})">Select This Offer</button>
+                `;
                 offersGrid.appendChild(card);
             });
+
+            updateChart(offers[0]);
         }
 
         function calculateFee(amount) {
-            // Fee structure: 
-            // Up to 10,000: 4%
-            // 10,001 - 50,000: 3.5%
-            // 50,001 - 100,000: 3%
-            // Above 100,000: 2.5%
-            let feePercent;
-            if (amount <= 10000) {
-                feePercent = 0.04;
-            } else if (amount <= 50000) {
-                feePercent = 0.035;
-            } else if (amount <= 100000) {
-                feePercent = 0.03;
-            } else {
-                feePercent = 0.025;
-            }
-            
-            return Math.round(amount * feePercent);
+            if (amount <= 5000) return 129;
+            if (amount <= 10000) return 250;
+            if (amount <= 50000) return 500;
+            if (amount <= 100000) return 1000;
+            return Math.round(amount * 0.015);
         }
 
-        function createOfferCard(offer) {
-            const card = document.createElement('div');
-            card.className = 'offer-card';
-            card.onclick = () => selectOffer(offer.id);
+        function calculateInterest(amount, term) {
+            return Math.round(amount * 0.07 * (term / 12));
+        }
+
+        function selectOffer(index) {
+            const offers = document.querySelectorAll('.offer-card');
+            offers.forEach((card, i) => {
+                card.classList.toggle('selected', i === index);
+            });
+
+            const income = userData.income;
+            const requestedAmount = userData.loanAmount;
             
-            card.innerHTML = `
-                ${offer.badge ? `<div class="offer-badge">${offer.badge}</div>` : ''}
-                <div class="offer-amount">KSH ${offer.amount.toLocaleString()}</div>
-                <div class="offer-details">
-                    <div class="offer-detail">
-                        <svg width="20" height="20" fill="#ff6b35" viewBox="0 0 16 16">
-                            <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-                            <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
-                        </svg>
-                        <span><strong>Processing Fee:</strong> KSH ${offer.fee.toLocaleString()}</span>
+            const offerData = [
+                {
+                    amount: requestedAmount,
+                    term: 12,
+                    fee: calculateFee(requestedAmount)
+                },
+                {
+                    amount: Math.floor(requestedAmount * 0.7),
+                    term: 6,
+                    fee: calculateFee(Math.floor(requestedAmount * 0.7))
+                },
+                {
+                    amount: Math.min(requestedAmount * 1.5, income * 5),
+                    term: 18,
+                    fee: calculateFee(Math.min(requestedAmount * 1.5, income * 5))
+                }
+            ][index];
+
+            selectedOffer = offerData;
+            updateChart(offerData);
+            showConsentModal(offerData);
+        }
+
+        function updateChart(offer) {
+            const interest = calculateInterest(offer.amount, offer.term);
+            const total = offer.amount + interest;
+
+            const canvas = document.getElementById('pieChart');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 200;
+            canvas.height = 200;
+
+            const centerX = 100;
+            const centerY = 100;
+            const radius = 80;
+
+            const principalAngle = (offer.amount / total) * 2 * Math.PI;
+            const interestAngle = (interest / total) * 2 * Math.PI;
+            const feeAngle = (offer.fee / total) * 2 * Math.PI;
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, 0, principalAngle);
+            ctx.closePath();
+            ctx.fillStyle = '#001F5C';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, principalAngle, principalAngle + interestAngle);
+            ctx.closePath();
+            ctx.fillStyle = '#FF6B00';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, principalAngle + interestAngle, principalAngle + interestAngle + feeAngle);
+            ctx.closePath();
+            ctx.fillStyle = '#FFB84D';
+            ctx.fill();
+
+            const legend = document.getElementById('chartLegend');
+            legend.innerHTML = `
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #001F5C;"></div>
+                    <div class="legend-text">
+                        <div class="legend-label">Principal Amount</div>
+                        <div class="legend-value">KSh ${offer.amount.toLocaleString()}</div>
                     </div>
-                    <div class="offer-detail">
-                        <svg width="20" height="20" fill="#2196f3" viewBox="0 0 16 16">
-                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
-                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
-                        </svg>
-                        <span><strong>Repayment:</strong> ${offer.term}</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF6B00;"></div>
+                    <div class="legend-text">
+                        <div class="legend-label">Interest (7%)</div>
+                        <div class="legend-value">KSh ${interest.toLocaleString()}</div>
                     </div>
-                    <div class="offer-detail">
-                        <svg width="20" height="20" fill="#4caf50" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                        </svg>
-                        <span><strong>Interest:</strong> 7% per annum</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFB84D;"></div>
+                    <div class="legend-text">
+                        <div class="legend-label">Processing Fee</div>
+                        <div class="legend-value">KSh ${offer.fee.toLocaleString()}</div>
                     </div>
                 </div>
             `;
-            
-            card.dataset.offerId = offer.id;
-            card.dataset.offerData = JSON.stringify(offer);
-            
-            return card;
         }
 
-        function selectOffer(offerId) {
-            // Remove selection from all cards
-            document.querySelectorAll('.offer-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            // Select clicked card
-            const selectedCard = document.querySelector(`[data-offer-id="${offerId}"]`);
-            selectedCard.classList.add('selected');
-            
-            selectedOffer = JSON.parse(selectedCard.dataset.offerData);
-            checkFormValidity();
+        function showProfile() {
+            const details = document.getElementById('profileDetails');
+            details.innerHTML = `
+                <div class="user-detail-item">
+                    <strong>Full Name:</strong> ${userData.fullName}
+                </div>
+                <div class="user-detail-item">
+                    <strong>ID Number:</strong> ${userData.idNumber}
+                </div>
+                <div class="user-detail-item">
+                    <strong>Phone:</strong> ${userData.phone}
+                </div>
+                <div class="user-detail-item">
+                    <strong>Email:</strong> ${userData.email}
+                </div>
+                <div class="user-detail-item">
+                    <strong>Monthly Income:</strong> KSh ${userData.income.toLocaleString()}
+                </div>
+                <div class="user-detail-item">
+                    <strong>Employment:</strong> ${userData.employment}
+                </div>
+                <div class="user-detail-item">
+                    <strong>County:</strong> ${userData.county}
+                </div>
+            `;
+            document.getElementById('profileModal').classList.add('active');
         }
 
-        // Check consent checkboxes
-        document.getElementById('consentTerms').addEventListener('change', checkFormValidity);
-        document.getElementById('consentCommunication').addEventListener('change', checkFormValidity);
+        function showConsentModal(offer) {
+            const interest = calculateInterest(offer.amount, offer.term);
+            const total = offer.amount + interest;
+            const monthly = Math.round(total / offer.term);
 
-        function checkFormValidity() {
-            const consentTerms = document.getElementById('consentTerms').checked;
-            const consentCommunication = document.getElementById('consentCommunication').checked;
-            const confirmBtn = document.getElementById('confirmBtn');
-            
-            if (selectedOffer && consentTerms && consentCommunication) {
-                confirmBtn.disabled = false;
-            } else {
-                confirmBtn.disabled = true;
-            }
+            const consentText = `
+                <p>You are about to confirm the following loan:</p>
+                <div class="user-detail-item">
+                    <strong>Loan Amount:</strong> KSh ${offer.amount.toLocaleString()}
+                </div>
+                <div class="user-detail-item">
+                    <strong>Loan Term:</strong> ${offer.term} months
+                </div>
+                <div class="user-detail-item">
+                    <strong>Interest (7%):</strong> KSh ${interest.toLocaleString()}
+                </div>
+                <div class="user-detail-item">
+                    <strong>Processing Fee:</strong> KSh ${offer.fee.toLocaleString()}
+                </div>
+                <div class="user-detail-item">
+                    <strong>Total Repayment:</strong> KSh ${total.toLocaleString()}
+                </div>
+                <div class="user-detail-item">
+                    <strong>Monthly Payment:</strong> KSh ${monthly.toLocaleString()}
+                </div>
+                <p style="margin-top: 1rem;">By confirming, you agree to repay the loan according to the schedule. Failure to repay may affect your credit score.</p>
+            `;
+
+            document.getElementById('consentText').innerHTML = consentText;
+            document.getElementById('finalConsent').checked = false;
+            document.getElementById('consentModal').classList.add('active');
         }
 
         function confirmLoan() {
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (!selectedOffer) {
-                errorMessage.textContent = 'Please select a loan offer.';
-                errorMessage.classList.add('show');
+            if (!document.getElementById('finalConsent').checked) {
+                alert('Please check the consent box to proceed');
                 return;
             }
-            
-            if (!document.getElementById('consentTerms').checked || !document.getElementById('consentCommunication').checked) {
-                errorMessage.textContent = 'Please accept all terms and consent statements.';
-                errorMessage.classList.add('show');
-                return;
-            }
-            
-            // Update user data with selected offer
+
+            if (!selectedOffer) return;
+
             userData.selectedOffer = selectedOffer;
-            userData.hasApplication = true;
-            userData.loanStatus = 'pending_payment';
-            userData.balance = selectedOffer.amount;
-            
-            // Store updated user data
-            localStorage.setItem('swiftLoanUser', JSON.stringify(userData));
-            
-            // Redirect to withdrawal page
+            userData.applicationStatus = 'approved';
+            localStorage.setItem('swiftLoanUserData', JSON.stringify(userData));
+            localStorage.setItem('swiftLoanLastPage', 'loan-withdrawal.html');
+
+            closeModal('consentModal');
             window.location.href = 'loan-withdrawal.html';
+        }
+
+        function confirmDelete() {
+            closeModal('profileModal');
+            document.getElementById('confirmDeleteModal').classList.add('active');
+        }
+
+        function deleteUserData() {
+            localStorage.removeItem('swiftLoanUserData');
+            localStorage.removeItem('swiftLoanLastPage');
+            window.location.href = 'index.html';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
         }
     </script>
 </body>
-                      </html>
+    </html>
